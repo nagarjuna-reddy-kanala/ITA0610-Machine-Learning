@@ -1,0 +1,64 @@
+import pandas as pd
+
+# Step 1: Create the training dataset
+data = {
+    "Sky": ["Sunny", "Sunny", "Rainy", "Sunny"],
+    "AirTemp": ["Warm", "Warm", "Cold", "Warm"],
+    "Humidity": ["Normal", "High", "High", "High"],
+    "Wind": ["Strong", "Strong", "Strong", "Strong"],
+    "Water": ["Warm", "Warm", "Warm", "Cool"],
+    "Forecast": ["Same", "Same", "Change", "Change"],
+    "EnjoySport": ["Yes", "Yes", "No", "Yes"]
+}
+
+df = pd.DataFrame(data)
+
+# Step 2: Save as CSV
+df.to_csv("training_data.csv", index=False)
+
+# Step 3: Read the CSV file
+data = pd.read_csv("training_data.csv")
+
+# Step 4: Initialize hypotheses
+attributes = list(data.columns[:-1])
+
+S = ["Ø"] * len(attributes)
+G = [["?"] * len(attributes)]
+
+# Step 5: Candidate Elimination
+for _, row in data.iterrows():
+
+    example = list(row[:-1])
+    target = row.iloc[-1]
+
+    if target == "Yes":
+
+        for i in range(len(S)):
+            if S[i] == "Ø":
+                S[i] = example[i]
+            elif S[i] != example[i]:
+                S[i] = "?"
+
+    else:
+        new_G = []
+
+        for g in G:
+            for i in range(len(S)):
+                if g[i] == "?":
+                    if S[i] != example[i] and S[i] != "?":
+                        new_g = g.copy()
+                        new_g[i] = S[i]
+                        new_G.append(new_g)
+
+        G = new_G
+
+# Step 6: Display results
+print("Training Data:")
+print(data)
+
+print("\nSpecific Hypothesis (S):")
+print(S)
+
+print("\nGeneral Hypothesis (G):")
+for g in G:
+    print(g)
