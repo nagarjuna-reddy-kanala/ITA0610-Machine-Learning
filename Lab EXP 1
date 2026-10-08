@@ -1,0 +1,33 @@
+# FIND-S Algorithm
+
+# Training data
+training_data = [
+    ["Sunny", "Warm", "Normal", "Strong", "Warm", "Same", "Yes"],
+    ["Sunny", "Warm", "High", "Strong", "Warm", "Same", "Yes"],
+    ["Rainy", "Cold", "High", "Strong", "Warm", "Change", "No"],
+    ["Sunny", "Warm", "High", "Strong", "Cool", "Change", "Yes"]
+]
+
+# Initialize the most specific hypothesis
+hypothesis = ["Ø", "Ø", "Ø", "Ø", "Ø", "Ø"]
+
+# FIND-S algorithm
+for example in training_data:
+
+    # Check whether the example is positive
+    if example[-1] == "Yes":
+
+        # Compare each attribute
+        for i in range(len(hypothesis)):
+
+            # First positive example
+            if hypothesis[i] == "Ø":
+                hypothesis[i] = example[i]
+
+            # If attributes are different, generalize using ?
+            elif hypothesis[i] != example[i]:
+                hypothesis[i] = "?"
+
+# Display the final hypothesis
+print("Final Most Specific Hypothesis:")
+print(hypothesis)
